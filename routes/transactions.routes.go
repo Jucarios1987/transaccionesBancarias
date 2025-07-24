@@ -6,6 +6,7 @@ import (
 
 	"github.com/Jucarios1987/transaccionesBancarias/db"
 	"github.com/Jucarios1987/transaccionesBancarias/models"
+	"github.com/gorilla/mux"
 )
 
 /* Funcion para obtener las cuentas */
@@ -17,7 +18,21 @@ func GetTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 
 /* Funcion para obtener una cuenta */
 func GetTransactionHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("get transaction"))
+
+	var transaction models.Transactions
+	params := mux.Vars(r)
+	//fmt.Println(params)
+
+	db.DB.Find(&transaction, params["id"])
+
+	if transaction.Id == 0 {
+		/* Establecemos un codigo de estado para la peticion HTTP */
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Transaction not found"))
+		return
+	}
+
+	json.NewEncoder(w).Encode(&transaction)
 }
 
 /* Funcion para crear una cuentra */
