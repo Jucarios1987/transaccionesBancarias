@@ -22,7 +22,6 @@ func GetAccountHandler(w http.ResponseWriter, r *http.Request) {
 
 	var account models.Accounts
 	params := mux.Vars(r)
-	// fmt.Println(params)
 
 	db.DB.Find(&account, params["id"])
 
@@ -54,10 +53,31 @@ func PostAccountHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(&account)
 
-	//w.Write([]byte("post"))
 }
 
 /* Funcion para eliminar una cuenta*/
 func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("delete"))
+	var account models.Accounts
+	/* Extraemos las variables que bienen desde mux */
+	// mux.Vars(r): Obtenemos lo que biene del request de la solicitud HTTP
+	params := mux.Vars(r)
+	// Buscamos una cuenta y la almacenamos en "account"
+	db.DB.First(&account, params["id"])
+
+	// Validamos si la cuenta existe antes de eliminar
+	if account.Id == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Accoun not foun"))
+
+		return
+	}
+
+	// Esta instruccion solo actializa la fecha de eliminacion en la DB lo que hace que el registro no se tenga en cuenta en busquedas.
+	// db.DB.Delete(&account)
+
+	// Esta instruccion borra el dato de la base dedatos
+	db.DB.Unscoped().Delete(&account)
+	w.WriteHeader(http.StatusOK)
+
+	// w.Write([]byte("delete"))
 }

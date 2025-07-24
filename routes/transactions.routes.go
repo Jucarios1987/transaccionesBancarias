@@ -52,5 +52,17 @@ func PostTransactionHandler(w http.ResponseWriter, r *http.Request) {
 
 /* Funcion para eliminar una cuenta*/
 func DeleteTransactionHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("delete"))
+	var transaction models.Transactions
+	params := mux.Vars(r)
+	db.DB.First(&transaction, params["id"])
+
+	if transaction.Id == 0 {
+		w.WriteHeader(http.StatusNotFound)
+		w.Write([]byte("Accoun not foun"))
+
+		return
+	}
+
+	db.DB.Unscoped().Delete(&transaction)
+	w.WriteHeader(http.StatusOK)
 }

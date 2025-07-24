@@ -32,13 +32,13 @@ func main() {
 	r.HandleFunc("/accounts", routes.GetAccountsHandler).Methods("GET")
 	r.HandleFunc("/accounts/{id}", routes.GetAccountHandler).Methods("GET")
 	r.HandleFunc("/accounts", routes.PostAccountHandler).Methods("POST")
-	r.HandleFunc("/accounts", routes.DeleteAccountHandler).Methods("DELETE")
+	r.HandleFunc("/accounts/{id}", routes.DeleteAccountHandler).Methods("DELETE")
 
 	// Establecemos las rutas para las peticiones http de las transacciones
 	r.HandleFunc("/transactions", routes.GetTransactionsHandler).Methods("GET")
 	r.HandleFunc("/transactions/{id}", routes.GetTransactionHandler).Methods("GET")
 	r.HandleFunc("/transactions", routes.PostTransactionHandler).Methods("POST")
-	r.HandleFunc("/transactions", routes.DeleteTransactionHandler).Methods("DELETE")
+	r.HandleFunc("/transactions/{id}", routes.DeleteTransactionHandler).Methods("DELETE")
 
 	// Inicializamos el ervidor
 	http.ListenAndServe(":3000", r)
