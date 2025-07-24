@@ -79,5 +79,4 @@ func DeleteAccountHandler(w http.ResponseWriter, r *http.Request) {
 	db.DB.Unscoped().Delete(&account)
 	w.WriteHeader(http.StatusOK)
 
-	// w.Write([]byte("delete"))
 }
