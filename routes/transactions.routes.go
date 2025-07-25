@@ -45,6 +45,7 @@ func PostTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
+		return
 	}
 
 	json.NewEncoder(w).Encode(&transaction)
@@ -64,5 +65,5 @@ func DeleteTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db.DB.Unscoped().Delete(&transaction)
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusNoContent)
 }

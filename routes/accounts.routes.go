@@ -32,6 +32,9 @@ func GetAccountHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Obtenemos las transacciones asociadas a la cuenta
+	db.DB.Model(&account).Association("Transactions").Find(&account.Transactions)
+
 	json.NewEncoder(w).Encode(&account)
 }
 
@@ -49,6 +52,7 @@ func PostAccountHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte(err.Error()))
+		return
 	}
 
 	json.NewEncoder(w).Encode(&account)
